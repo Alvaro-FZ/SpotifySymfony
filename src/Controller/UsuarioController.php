@@ -3,42 +3,45 @@
 namespace App\Controller;
 
 use App\Entity\Usuario;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Perfil;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class UsuarioController extends AbstractController
 {
     #[Route('/usuario', name: 'app_usuario')]
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/UsuarioController.php',
+        return $this->render('usuario/index.html.twig', [
+            'controller_name' => 'UsuarioController',
         ]);
     }
 
     #[Route('/usuario/new', name: 'app_usuario_crear')]
-    public function crearUsuario(EntityManagerInterface $entityManager): JsonResponse
+    public function crearUsuario(EntityManagerInterface $entityManager): Response
     {
-        $usuario = new Usuario();
-        $usuario->setEmail("usuario1@ejem.plo");
-        $usuario->setPassword("1234");
-        $usuario->setNombre("usuario1");
+        $repository = $entityManager->getRepository(Perfil::class);
+        $perfilEncontrado = $repository->buscarPerfil(3);
 
-        $fechaNacimiento = \DateTime::createFromFormat('Y-m-d', '2004-05-15');
-        $usuario->setFechaNacimiento($fechaNacimiento);
+        $usuario = new Usuario();
+        $usuario->setEmail("usuario1@email.clase");
+        $usuario->setPassword("usuario1");
+        $usuario->setNombre("usuario1");
+        $usuario->setFechaNacimiento("06/01/2004");
+        $usuario->setPerfil($perfilEncontrado);
 
         $entityManager->persist($usuario);
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Usuario creado correctamente.',
+            'message' => 'usuario creado correctamente.',
             'usuario' => [
                 'email' => $usuario->getEmail(),
+                'password' => $usuario->getPassword(),
                 'nombre' => $usuario->getNombre(),
-                'fechaNacimiento' => $usuario->getFechaNacimiento()->format('Y-m-d'),
+                'fechaNacimiento' => $usuario->getFechaNacimiento(),
             ],
         ]);
     }

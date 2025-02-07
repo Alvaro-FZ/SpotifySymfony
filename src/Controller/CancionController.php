@@ -3,31 +3,46 @@
 namespace App\Controller;
 
 use App\Entity\Cancion;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Estilo;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class CancionController extends AbstractController
 {
-    #[Route('/cancion', name: 'app_cancion')]
-    public function index(): JsonResponse
+    #[Route('/cancion/{songName}/play', name: 'play_music', methods: ['GET'])]
+    public function playMusic(string $songName): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/CancionController.php',
+        $musicDirectory = $this->getParameter('kernel.project_dir') . '/songs/';
+        $filePath = $musicDirectory . $songName;
+        if (!file_exists($filePath)) {
+            return new Response('Archivo no encontrado', 404);
+        }
+        return new BinaryFileResponse($filePath);
+    }
+
+    #[Route('/cancion', name: 'app_cancion')]
+    public function index(): Response
+    {
+        return $this->render('cancion/index.html.twig', [
+            'controller_name' => 'CancionController',
         ]);
     }
 
     #[Route('/cancion/new', name: 'app_cancion_crear')]
-    public function crearCancion(EntityManagerInterface $entityManager): JsonResponse
+    public function createCancion(EntityManagerInterface $entityManager): Response
     {
+        $repository = $entityManager->getRepository(Estilo::class);
+        $genero = $repository->buscarEstilo("rock");
+        
         $cancion = new Cancion();
+        $cancion->setGenero($genero);
         $cancion->setTitulo("titulo1");
         $cancion->setDuracion(90);
         $cancion->setAlbum("album1");
         $cancion->setAutor("autor1");
-        $cancion->setReproducciones(150);
         $cancion->setLikes(60);
 
         $entityManager->persist($cancion);
@@ -40,7 +55,6 @@ final class CancionController extends AbstractController
                 'duracion' => $cancion->getDuracion(),
                 'album' => $cancion->getAlbum(),
                 'autor' => $cancion->getAutor(),
-                'reproducciones' => $cancion->getReproducciones(),
                 'likes' => $cancion->getLikes(),
             ],
         ]);

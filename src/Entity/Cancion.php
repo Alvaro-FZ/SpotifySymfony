@@ -28,9 +28,6 @@ class Cancion
     private ?string $autor = null;
 
     #[ORM\Column]
-    private ?int $reproducciones = null;
-
-    #[ORM\Column]
     private ?int $likes = null;
 
     /**
@@ -39,7 +36,7 @@ class Cancion
     #[ORM\OneToMany(targetEntity: PlaylistCancion::class, mappedBy: 'cancion')]
     private Collection $playlistCancions;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'cancions')]
     private ?Estilo $genero = null;
 
     public function __construct()
@@ -100,18 +97,6 @@ class Cancion
         return $this;
     }
 
-    public function getReproducciones(): ?int
-    {
-        return $this->reproducciones;
-    }
-
-    public function setReproducciones(int $reproducciones): static
-    {
-        $this->reproducciones = $reproducciones;
-
-        return $this;
-    }
-
     public function getLikes(): ?int
     {
         return $this->likes;
@@ -164,5 +149,10 @@ class Cancion
         $this->genero = $genero;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->titulo;
     }
 }

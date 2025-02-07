@@ -3,31 +3,33 @@
 namespace App\Controller;
 
 use App\Entity\Playlist;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Usuario;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PlaylistController extends AbstractController
 {
     #[Route('/playlist', name: 'app_playlist')]
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/PlaylistController.php',
+        return $this->render('playlist/index.html.twig', [
+            'controller_name' => 'PlaylistController',
         ]);
     }
 
-
     #[Route('/playlist/new', name: 'app_playlist_crear')]
-    public function crearPlaylist(EntityManagerInterface $entityManager): JsonResponse
+    public function crearPlaylist(EntityManagerInterface $entityManager): Response
     {
+        $repository = $entityManager->getRepository(Usuario::class);
+        $usuarioEncontrado = $repository->buscarUsuario(1);
+        
         $playlist = new Playlist();
-        $playlist->setNombre("playlist1");
-        $playlist->setVisibilidad("publico");
-        $playlist->setReproducciones(200);
-        $playlist->setLikes(34);
+        $playlist->setNombre("playlist 1");
+        $playlist->setVisibilidad("privado");
+        $playlist->setLikes(60);
+        $playlist->setUsuarioPropietario($usuarioEncontrado);
 
         $entityManager->persist($playlist);
         $entityManager->flush();
@@ -37,7 +39,6 @@ final class PlaylistController extends AbstractController
             'playlist' => [
                 'nombre' => $playlist->getNombre(),
                 'visibilidad' => $playlist->getVisibilidad(),
-                'reproducciones' => $playlist->getReproducciones(),
                 'likes' => $playlist->getLikes(),
             ],
         ]);

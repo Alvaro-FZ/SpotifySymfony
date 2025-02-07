@@ -21,18 +21,15 @@ class Perfil
     #[ORM\Column(length: 255)]
     private ?string $descripcion = null;
 
-    #[ORM\ManyToOne(inversedBy: 'perfil')]
-    private ?Usuario $usuario = null;
-
     /**
      * @var Collection<int, Estilo>
      */
-    #[ORM\OneToMany(targetEntity: Estilo::class, mappedBy: 'perfil')]
-    private Collection $estiloMusical;
+    #[ORM\ManyToMany(targetEntity: Estilo::class, inversedBy: 'perfils')]
+    private Collection $estilosMusicalPreferidos;
 
     public function __construct()
     {
-        $this->estiloMusical = new ArrayCollection();
+        $this->estilosMusicalPreferidos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,44 +61,26 @@ class Perfil
         return $this;
     }
 
-    public function getUsuario(): ?Usuario
-    {
-        return $this->usuario;
-    }
-
-    public function setUsuario(?Usuario $usuario): static
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Estilo>
      */
-    public function getEstiloMusical(): Collection
+    public function getEstilosMusicalPreferidos(): Collection
     {
-        return $this->estiloMusical;
+        return $this->estilosMusicalPreferidos;
     }
 
-    public function addEstiloMusical(Estilo $estiloMusical): static
+    public function addEstilosMusicalPreferido(Estilo $estilosMusicalPreferido)
     {
-        if (!$this->estiloMusical->contains($estiloMusical)) {
-            $this->estiloMusical->add($estiloMusical);
-            $estiloMusical->setPerfil($this);
+        if (!$this->estilosMusicalPreferidos->contains($estilosMusicalPreferido)) {
+            $this->estilosMusicalPreferidos->add($estilosMusicalPreferido);
         }
 
         return $this;
     }
 
-    public function removeEstiloMusical(Estilo $estiloMusical): static
+    public function removeEstilosMusicalPreferido(Estilo $estilosMusicalPreferido)
     {
-        if ($this->estiloMusical->removeElement($estiloMusical)) {
-            // set the owning side to null (unless already changed)
-            if ($estiloMusical->getPerfil() === $this) {
-                $estiloMusical->setPerfil(null);
-            }
-        }
+        $this->estilosMusicalPreferidos->removeElement($estilosMusicalPreferido);
 
         return $this;
     }

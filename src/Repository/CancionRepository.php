@@ -16,28 +16,38 @@ class CancionRepository extends ServiceEntityRepository
         parent::__construct($registry, Cancion::class);
     }
 
-//    /**
-//     * @return Cancion[] Returns an array of Cancion objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Cancion[] Returns an array of Cancion objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('c.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Cancion
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function buscarCancion($titulo): ?Cancion
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.titulo = :titulo')
+            ->setParameter('titulo', $titulo)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function buscarCancionPorId($id): ?Cancion
+   {
+       return $this->createQueryBuilder('c')
+           ->andWhere('c.id = :id')
+           ->setParameter('id', $id)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
 }
