@@ -30,10 +30,10 @@
                     {% for cancion in canciones %}
                         <div class="song-card" id="{{cancion.titulo}}" onclick="playSound('{{cancion.titulo}}')">
                             <img class="song-image" 
-                                src="https://img.edilportale.com/product-thumbs/b_prodotti-128332-relf71b16b9e91e4f1bab182d5fa397b156.jpg" 
+                                src="{{ cancion.portada ?: 'https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg' }}" 
                                 style="width: 10em;">
                             <br>
-                            {{cancion.titulo}}
+                            <strong>{{cancion.titulo}}</strong>
                         </div>
                     {% endfor %}
                 </div>
