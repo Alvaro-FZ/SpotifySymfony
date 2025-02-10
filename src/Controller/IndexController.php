@@ -23,14 +23,6 @@ final class IndexController extends AbstractController
         return new BinaryFileResponse($filePath);
     }
 
-    /* #[Route('/app/interface', name: 'app_interface')]
-    public function index(): Response
-    {
-        return $this->render('app_interface/index.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
-    } */
-
     #[Route('/music', name: 'index')]
     public function index(EntityManagerInterface $entityManager): Response
     {

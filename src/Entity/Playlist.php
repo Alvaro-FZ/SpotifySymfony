@@ -39,6 +39,9 @@ class Playlist
     #[ORM\ManyToOne(inversedBy: 'playlists')]
     private ?Usuario $usuarioPropietario = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $portada = null;
+
     public function __construct()
     {
         $this->playlistCancions = new ArrayCollection();
@@ -161,5 +164,17 @@ class Playlist
     public function __toString()
     {
         return $this->getNombre();
+    }
+
+    public function getPortada(): ?string
+    {
+        return $this->portada;
+    }
+
+    public function setPortada(?string $portada): static
+    {
+        $this->portada = $portada;
+
+        return $this;
     }
 }

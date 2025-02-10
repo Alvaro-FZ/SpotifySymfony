@@ -8,15 +8,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 final class PlaylistController extends AbstractController
 {
     #[Route('/playlist', name: 'app_playlist')]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        return $this->render('playlist/index.html.twig', [
+        $playlists = $entityManager->getRepository(Playlist::class)->findAll();
+        return $this->render('playlist/index.html.twig', ['playlists' => $playlists,]);
+
+        /* return $this->render('playlist/index.html.twig', [
             'controller_name' => 'PlaylistController',
-        ]);
+        ]); */
     }
 
     #[Route('/playlist/new', name: 'app_playlist_crear')]
