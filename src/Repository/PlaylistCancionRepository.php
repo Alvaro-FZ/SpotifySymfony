@@ -40,4 +40,15 @@ class PlaylistCancionRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findCancionesByPlaylist(int $playlistId): array
+    {
+        return $this->createQueryBuilder('pc')
+        ->join('pc.cancion', 'c') // "pc.cancion" debe coincidir con la relación en PlaylistCancion
+        ->addSelect('c') // Selecciona los datos de la canción
+        ->where('pc.playlist = :playlistId') // "pc.playlist" debe coincidir con la relación en PlaylistCancion
+        ->setParameter('playlistId', $playlistId)
+        ->getQuery()
+        ->getResult();
+    }
 }

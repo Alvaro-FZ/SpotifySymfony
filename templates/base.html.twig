@@ -12,7 +12,7 @@
                 <nav class="navbar">
                     <div class="logo">
                         <img src="{{ asset('images/Spotify_Logo_Black.png') }}" alt="MySpotify Logo">
-                        <span>MySpotify</span>
+                        <span class="titulo" onclick="window.location.href='{{ path('index')}}'">MySpotify</span>
                     </div>
                     <div class="search-bar">
                         <input type="text" placeholder="¿Qué quieres reproducir?">
@@ -285,9 +285,9 @@
                 }
 
                 /* Adjust main container to account for player height */
-                .container {
+                /*.container {
                     margin-bottom: 80px;
-                }
+                }*/
 
                 /* Footer styles */
                 footer {

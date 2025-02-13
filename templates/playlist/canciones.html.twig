@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <h1>{{ playlistNombre }}</h1>
+    <div class="songs-grid" id="songsContainer">
+        {% for playlistCancion in canciones %}
+            <div class="song-card" id="{{playlistCancion.cancion.titulo}}" onclick="playSound('{{playlistCancion.cancion.titulo}}')">
+                <img class="song-image" 
+                    src="{{ playlistCancion.cancion.portada ?: asset('images/Image_not_found.jpg') }}" 
+                    style="width: 10em;">
+                <br>
+                <strong>{{playlistCancion.cancion.titulo}}</strong>
+            </div>
+        {% endfor %}
+    </div>  
+    <a href="{{ path('app_playlist') }}" class="back-button">Volver</a>
+    
+    <style>
+        .back-button {
+            display: inline-block;
+            background-color: #1db954;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 150px; /* Para dejarlo por encima del reproductor de audio */
+            left: 220px; /* Para dejarlo después de la barra lateral */
+            z-index: 999;
+        }
+
+        .back-button:hover {
+            background-color: #1ed760;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
