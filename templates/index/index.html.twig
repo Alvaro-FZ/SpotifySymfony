@@ -1,0 +1,22 @@
+{# templates/music/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block sidebar %}
+    <a href="/music"><li class="active"><strong>Canciones</strong></li></a>
+    <a href="/playlist"><li><strong>Playlists</strong></li></a>
+{% endblock %}
+
+{% block content %}
+    <h1>Tus canciones</h1>
+    <div class="songs-grid" id="songsContainer">
+        {% for cancion in canciones %}
+            <div class="song-card" id="{{cancion.titulo}}" onclick="playSound('{{cancion.archivo}}','{{cancion.titulo}}')">
+                <img class="song-image" 
+                    src="{{ cancion.portada ?: asset('images/Image_not_found.jpg') }}" 
+                    style="width: 10em;">
+                <br>
+                <strong>{{cancion.titulo}}</strong>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
