@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Estadísticas{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+    <h2>Estadísticas de Reproducciones por Playlist</h2>
+    <canvas id="reproduccionesChart"></canvas>
+    <h2>Estadísticas de Reproducciones por Likes</h2>
+    <canvas id="likesChart"></canvas>
+    <h2>Estadísticas de Reproducciones por usuarios Registrados</h2>
+    <canvas id="usuariosRegistradosChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // Un único evento DOMContentLoaded para todos los gráficos
+    document.addEventListener("DOMContentLoaded", function () {
+        // Función para generar colores aleatorios
+        const getRandomColors = (count, alpha) => {
+            return Array(count).fill().map(() => 
+                `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${alpha})`
+            );
+        };
+
+        // 1. Gráfico de Reproducciones (Barras)
+        fetch("{{ path('estadisticas_datos') }}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = data.map(item => item.playlist);
+            const values = data.map(item => item.totalReproducciones);
+            const ctx = document.getElementById('reproduccionesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Reproducciones',
+                        data: values,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error cargando datos de reproducciones:', error));
+
+        // 2. Gráfico de Likes (Doughnut)
+        fetch("{{ path('estadisticas_likes') }}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = data.map(item => item.playlist);
+            const values = data.map(item => item.likes);
+            const ctx = document.getElementById('likesChart').getContext('2d');
+            
+            // Generar colores aleatorios para cada segmento
+            const backgroundColors = getRandomColors(labels.length, 0.7);
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Likes',
+                        data: values,
+                        backgroundColor: backgroundColors,
+                        borderColor: backgroundColors.map(color => color.replace('0.7', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value * 100) / total);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '50%'
+                }
+            });
+        })
+        .catch(error => console.error('Error cargando datos de likes:', error));
+
+        // 3. Gráfico de Usuarios Registrados (Polar Area)
+        fetch("{{ path('estadisticas_usuarios') }}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = data.map(item => item.usuario);
+            const values = data.map(item => item.totalRegistros);
+            const ctx = document.getElementById('usuariosRegistradosChart').getContext('2d');
+            
+            // Generar colores aleatorios para cada segmento
+            const backgroundColors = getRandomColors(labels.length, 0.6);
+            
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Registros',
+                        data: values,
+                        backgroundColor: backgroundColors,
+                        borderColor: backgroundColors.map(color => color.replace('0.6', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value * 100) / total);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            ticks: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error cargando datos de usuarios:', error));
+    });
+</script>
+
+{% endblock %}

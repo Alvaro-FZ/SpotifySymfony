@@ -24,6 +24,16 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function obtenerUsuariosRegistrados(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.email AS usuario, COUNT(u.id) AS totalRegistros')
+            ->groupBy('u.id')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {

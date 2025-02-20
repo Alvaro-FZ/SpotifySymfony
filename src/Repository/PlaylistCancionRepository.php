@@ -41,14 +41,24 @@ class PlaylistCancionRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    public function obtenerReproduccionesPorPlaylist(): array
+    {
+        return $this->createQueryBuilder('pc')
+            ->select('p.nombre AS playlist, SUM(pc.reproducciones) AS totalReproducciones')
+            ->join('pc.playlist', 'p')
+            ->groupBy('p.id')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findCancionesByPlaylist(int $playlistId): array
     {
         return $this->createQueryBuilder('pc')
-        ->join('pc.cancion', 'c') // "pc.cancion" debe coincidir con la relación en PlaylistCancion
-        ->addSelect('c') // Selecciona los datos de la canción
-        ->where('pc.playlist = :playlistId') // "pc.playlist" debe coincidir con la relación en PlaylistCancion
-        ->setParameter('playlistId', $playlistId)
-        ->getQuery()
-        ->getResult();
+            ->join('pc.cancion', 'c') // "pc.cancion" debe coincidir con la relación en PlaylistCancion
+            ->addSelect('c') // Selecciona los datos de la canción
+            ->where('pc.playlist = :playlistId') // "pc.playlist" debe coincidir con la relación en PlaylistCancion
+            ->setParameter('playlistId', $playlistId)
+            ->getQuery()
+            ->getResult();
     }
 }

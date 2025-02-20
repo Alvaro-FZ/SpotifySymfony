@@ -31,6 +31,15 @@ class PlaylistRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    public function obtenerLikesPlaylist(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.nombre AS playlist, SUM(p.likes) AS likes')
+            ->groupBy('p.id')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function buscarPlaylist($nombre): ?Playlist
     {
         return $this->createQueryBuilder('p')
