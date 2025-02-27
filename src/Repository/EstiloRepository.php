@@ -31,6 +31,15 @@ class EstiloRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    public function obtenerEstilosPorUsuario(): ?Estilo
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.nombre = :nombre')
+            ->setMaxResults(1) // Asegura que solo se devuelva un resultado
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function buscarEstilo($nombre): ?Estilo
     {
         return $this->createQueryBuilder('e')

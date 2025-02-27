@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear nueva Playlist{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Crear nueva Playlist</h1>
+        
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="mb-3">
+                {{ form_label(form.nombre) }}
+                {{ form_widget(form.nombre) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.nombre) }}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form_label(form.visibilidad) }}
+                {{ form_widget(form.visibilidad) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.visibilidad) }}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form_label(form.likes) }}
+                {{ form_widget(form.likes) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.likes) }}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form_label(form.portada) }}
+                {{ form_widget(form.portada) }}
+                <small class="form-text text-muted">Introduce la URL de una imagen para la portada de la playlist.</small>
+                <div class="invalid-feedback">
+                    {{ form_errors(form.portada) }}
+                </div>
+            </div>
+            
+            {# Añade aquí el nuevo campo para seleccionar canciones #}
+            <div class="mb-3">
+                {{ form_label(form.canciones) }}
+                <div class="canciones-container">
+                    {{ form_widget(form.canciones) }}
+                </div>
+                <div class="invalid-feedback">
+                    {{ form_errors(form.canciones) }}
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Crear Playlist</button>
+        {{ form_end(form) }}
+        
+        <a href="{{ path('app_playlist_crear') }}" class="btn btn-secondary mt-3">Volver al listado</a>
+    </div>
+
+    {# Estilos CSS para la lista de canciones #}
+    <style>
+        .canciones-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            padding: 10px;
+        }
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .checkbox-list label {
+            margin-bottom: 5px;
+        }
+    </style>
+{% endblock %}

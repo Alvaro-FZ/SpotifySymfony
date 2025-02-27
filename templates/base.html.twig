@@ -20,7 +20,7 @@
                         <button onclick="buscarCancion()">Buscar</button>    
                     </div>
                     <div class="user-profile">
-                        <img src="https://img.edilportale.com/product-thumbs/b_prodotti-128332-relf71b16b9e91e4f1bab182d5fa397b156.jpg" alt="Perfil">
+                        <img src="https://img.edilportale.com/product-thumbs/b_prodotti-128332-relf71b16b9e91e4f1bab182d5fa397b156.jpg" alt="Perfil" onclick="window.location.href='{{ path('app_login')}}'" class="perfil_img">
                     </div>
                 </nav>
 
@@ -28,8 +28,7 @@
                     <aside class="sidebar">
                         <ul>
                             {% block sidebar %}
-                                {# <a href="/music"><li><strong>Canciones</strong></li></a>
-                                <a href="/playlist"><li><strong>Playlists</strong></li></a> #}
+                            
                             {% endblock %}
                         </ul>
                     </aside>
@@ -99,6 +98,10 @@
                 }
 
                 .logo:hover {
+                    cursor: pointer;
+                }
+
+                .login_img:hover{
                     cursor: pointer;
                 }
 
@@ -408,6 +411,43 @@
                 volumeSlider.addEventListener('input', (e) => {
                     audioPlayer.volume = e.target.value / 100;
                 });
+
+
+                {# ---------------------Busqueda-de-canciones------------------------ #}
+
+
+                function buscarCancion() {
+                    let query = document.querySelector('.search-bar input').value.trim();
+
+                    if (query === '') return;
+
+                    fetch(`/buscar?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => mostrarResultados(data))
+                        .catch(error => console.error('Error en la búsqueda:', error));
+                }
+
+                function mostrarResultados(data) {
+                    let content = document.querySelector('.content');
+                    content.innerHTML = `<h2>Resultados de búsqueda</h2>`;
+
+                    let cancionesHtml = data.canciones.map(song => `
+                        <div class="song-card" onclick="playSound('${song.archivo}', '${song.titulo}')">
+                            <div class="song-image"><img src="${song.portada}" alt="${song.titulo}"></div>
+                            <h3>${song.titulo}</h3>
+                        </div>
+                    `).join('');
+
+                    let playlistsHtml = data.playlists.map(playlist => `
+                        <div class="song-card" onclick="window.location.href='/playlist/${playlist.id}/canciones'">
+                            <div class="song-image"><img src="${playlist.portada}" alt="${playlist.nombre}"></div>
+                            <h3>${playlist.nombre}</h3>
+                        </div>
+                    `).join('');
+
+                    content.innerHTML += `<div class="songs-grid">${cancionesHtml}${playlistsHtml}</div>`;
+                }
+
             </script>
             {% endblock %}
         {% endblock %}

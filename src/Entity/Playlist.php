@@ -24,6 +24,9 @@ class Playlist
     #[ORM\Column]
     private ?int $likes = null;
 
+    #[ORM\Column(options: ["default" => 0])]
+    private ?int $reproducciones = 0;
+
     /**
      * @var Collection<int, PlaylistCancion>
      */
@@ -174,6 +177,18 @@ class Playlist
     public function setPortada(?string $portada): static
     {
         $this->portada = $portada;
+
+        return $this;
+    }
+
+    public function getReproducciones(): ?int
+    {
+        return $this->reproducciones;
+    }
+
+    public function setReproducciones(int $reproducciones): static
+    {
+        $this->reproducciones = $reproducciones;
 
         return $this;
     }

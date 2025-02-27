@@ -5,6 +5,7 @@ namespace App\Controller\Manager;
 use App\Repository\PlaylistCancionRepository;
 use App\Repository\PlaylistRepository;
 use App\Repository\UserRepository;
+use App\Repository\EstiloRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,13 @@ class EstadisticasController extends AbstractController
     public function obtenerUsuarios(UserRepository $userRepository): JsonResponse
     {
         $datos = $userRepository->obtenerUsuariosRegistrados();
+        return $this->json($datos); // convierte el array $datos en una respuesta JSON.
+    }
+
+    #[Route('/estadisticas/estilos', name: 'estadisticas_estilos')]
+    public function obtenerEstilos(EstiloRepository $estiloRepository): JsonResponse
+    {
+        $datos = $estiloRepository->obtenerEstilosPorUsuario();
         return $this->json($datos); // convierte el array $datos en una respuesta JSON.
     }
 }

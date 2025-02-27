@@ -31,6 +31,15 @@ class CancionRepository extends ServiceEntityRepository
     //        ;
     //    }
 
+    public function findByTitulo(string $query): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.titulo LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function buscarCancion($titulo): ?Cancion
     {
         return $this->createQueryBuilder('c')
