@@ -8,18 +8,20 @@ use App\Repository\PlaylistCancionRepository;
 use App\Entity\PlaylistCancion;
 use App\Form\PlaylistType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Attribute\IsGranted as AttributeIsGranted;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class PlaylistController extends AbstractController
 {
 
     #[Route('/playlist/{id}/canciones', name: 'playlist_canciones')]
-    public function canciones(int $id, PlaylistCancionRepository $playlistCancionRepository): Response
+    public function canciones(AuthenticationUtils $authenticationUtils, int $id, PlaylistCancionRepository $playlistCancionRepository, LoggerInterface $logger): Response
     {
         $playlistData = $playlistCancionRepository->findCancionesByPlaylist($id);
 
@@ -29,6 +31,11 @@ final class PlaylistController extends AbstractController
 
         // Obtener el nombre de la playlist (ya que todas las canciones tienen la misma playlist)
         $playlistNombre = $playlistData[0]->getPlaylist()->getNombre();
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $logger->notice('## Usuario ' . $lastUsername . ' Entró en la playlist "' . $playlistNombre . '".');
 
         return $this->render('playlist/canciones.html.twig', [
             'playlistNombre' => $playlistNombre,
@@ -71,7 +78,7 @@ final class PlaylistController extends AbstractController
 
     #[AttributeIsGranted('ROLE_USUARIO')]
     #[Route('/playlist/new', name: 'app_playlist_crear')]
-    public function crearPlaylist(Request $request, EntityManagerInterface $entityManager): Response
+    public function crearPlaylist(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $playlist = new Playlist();
 
@@ -111,6 +118,10 @@ final class PlaylistController extends AbstractController
             $this->addFlash('success', 'Playlist creada correctamente con ' . count($canciones) . ' canciones.');
 
             // Ajusta esta ruta a la que quieras usar para redireccionar
+            // last username entered by the user
+            $lastUsername = $authenticationUtils->getLastUsername();
+
+            $logger->notice('## Usuario ' . $lastUsername . ' Creó una nueva playlist: "' . $form->get('nombre')->getData() . '".');
             return $this->redirectToRoute('app_playlist');
         }
 

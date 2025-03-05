@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Cancion;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class IndexController extends AbstractController
 {
@@ -24,9 +26,15 @@ final class IndexController extends AbstractController
     }
 
     #[Route('/music', name: 'index')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(AuthenticationUtils $authenticationUtils, LoggerInterface $logger, EntityManagerInterface $entityManager): Response
     {
         $canciones = $entityManager->getRepository(Cancion::class)->findAll();
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $logger->notice('## Usuario ' . $lastUsername . ' Entró en canciones.');
+
         return $this->render('index/index.html.twig', ['canciones' => $canciones,]);
     }
 }

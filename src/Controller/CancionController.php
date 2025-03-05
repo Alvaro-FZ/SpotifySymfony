@@ -20,6 +20,8 @@ final class CancionController extends AbstractController
         if (!file_exists($filePath)) {
             return new Response('Archivo no encontrado', 404);
         }
+
+        
         return new BinaryFileResponse($filePath);
     }
 

@@ -51,12 +51,12 @@ class CancionRepository extends ServiceEntityRepository
     }
 
     public function buscarCancionPorId($id): ?Cancion
-   {
-       return $this->createQueryBuilder('c')
-           ->andWhere('c.id = :id')
-           ->setParameter('id', $id)
-           ->getQuery()
-           ->getOneOrNullResult()
-       ;
-   }
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

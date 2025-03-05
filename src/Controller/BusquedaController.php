@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Repository\CancionRepository;
 use App\Repository\PlaylistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BusquedaController extends AbstractController
 {
     #[Route('/buscar', name: 'buscar', methods: ['GET'])]
-    public function buscar(Request $request, CancionRepository $cancionRepo, PlaylistRepository $playlistRepo): JsonResponse
+    public function buscar(AuthenticationUtils $authenticationUtils, Request $request, CancionRepository $cancionRepo, PlaylistRepository $playlistRepo, LoggerInterface $logger): JsonResponse
     {
         $query = $request->query->get('q', '');
 
@@ -37,6 +39,11 @@ class BusquedaController extends AbstractController
             'nombre' => $p->getNombre(),
             'portada' => $p->getPortada() ?? 'default.png'
         ], $playlists);
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        $logger->notice('## Usuario ' . $lastUsername . ' buscó: "' . $query . '"');
 
         // Enviar la respuesta en formato JSON
         return new JsonResponse([

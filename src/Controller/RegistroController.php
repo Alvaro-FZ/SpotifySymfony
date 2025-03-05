@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,8 @@ class RegistroController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -33,6 +35,9 @@ class RegistroController extends AbstractController
             $user->setRoles($form->get('roles')->getData());
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $logger->notice('## Se ha registrado un nuevo usuario: "' . $form->get('email')->getData() . '".');
+            
             return $this->redirectToRoute('index');
         }
         return $this->render('registro/index.html.twig', [
