@@ -1,21 +1,30 @@
 {# templates/playlist/index.html.twig #}
 {% extends 'base.html.twig' %}
+
 {% block sidebar %}
     <a href="/music"><li><strong>Canciones</strong></li></a>
+    <br>
     <a href="/playlist"><li class="active"><strong>Playlists</strong></li></a>
+    <br>
+    <a href="/playlist/new"><li><strong>Crear Playlist</strong></li></a>
+    <br>
+    <a href="/mis-playlists"><li><strong>Mis Playlists</strong></li></a>
 {% endblock %}
 {% block content %}
     <h1>Playlists</h1>
     <div class="songs-grid" id="songsContainer">
         {% for playlist in playlists %}
-        <div class="song-card" id="{{ playlist.id }}" 
-            onclick="window.location.href='{{ path('playlist_canciones', {'id': playlist.id}) }}'">
-            <img class="song-image" 
-                src="{{ playlist.portada ?: asset('images/Image_not_found.jpg') }}" 
-                style="width: 10em;">
-            <br>
-            <strong>{{ playlist.nombre }}</strong>
-        </div>
-    {% endfor %}
+            <div class="song-card" id="{{ playlist.id }}" 
+                onclick="window.location.href='{{ path('playlist_canciones', {'id': playlist.id}) }}'">
+                <img class="song-image" 
+                    src="{{ playlist.portada ?: asset('images/Image_not_found.jpg') }}" 
+                    style="width: 10em;">
+                <br>
+                <strong>{{ playlist.nombre }}</strong>
+                <br><br>
+                <h4><strong>Creador/a:</strong></h4>
+                <h4>{{ playlist.usuarioPropietario }}</h4>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

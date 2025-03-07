@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .access-denied-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+        }
+
+        .access-denied-message {
+            background-color: #282828;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .access-denied-header {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .access-denied-text {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .access-denied-button {
+            padding: 0.75rem;
+            background-color: #1DB954;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .access-denied-button:hover {
+            background-color: #1ed760;
+        }
+
+        .access-denied-button.secondary {
+            background-color: #FF4B4B; /* Color rojo para el botón "Iniciar sesión" */
+        }
+
+        .access-denied-button.secondary:hover {
+            background-color: #FF6B6B; /* Hover más claro para el botón "Iniciar sesión" */
+        }
+    </style>
+
+    <div class="access-denied-container">
+        <div>
+            <div class="access-denied-message">
+                <h1 class="access-denied-header">Acceso Denegado</h1>
+                <p class="access-denied-text">
+                    No tienes permisos para acceder a esta página.
+                </p>
+                <div class="buttons-container">
+                    <a href="{{ path('index') }}">
+                        <button class="access-denied-button">Volver al Inicio</button>
+                    </a>
+                    <a href="{{ path('app_login') }}">
+                        <button class="access-denied-button secondary">Iniciar sesión</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

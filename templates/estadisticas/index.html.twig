@@ -5,12 +5,12 @@
 {% block body %}
 
     <div class="container">
-    <h2>Estadísticas de Reproducciones por Playlist</h2>
-    <canvas id="reproduccionesChart"></canvas>
-    <h2>Estadísticas de Reproducciones por Likes</h2>
-    <canvas id="likesChart"></canvas>
-    <h2>Estadísticas de Reproducciones por usuarios Registrados</h2>
-    <canvas id="usuariosRegistradosChart"></canvas>
+        <h2>Estadísticas de Reproducciones por Playlist</h2>
+        <canvas id="reproduccionesChart"></canvas>
+        <h2>Estadísticas de Reproducciones por Likes</h2>
+        <canvas id="likesChart"></canvas>
+        <h2>Estadísticas de Reproducciones por usuarios Registrados</h2>
+        <canvas id="usuariosRegistradosChart"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -156,5 +156,73 @@
         .catch(error => console.error('Error cargando datos de usuarios:', error));
     });
 </script>
+<style>
+    body {
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Estilos generales para la página */
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    h2 {
+        color: white;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Estilo para los canvas de las gráficas */
+    canvas {
+        width: 100% !important; /* Ocupa el 100% del ancho disponible */
+        max-width: 1000px; /* Limita el ancho máximo */
+        height: auto !important; /* Altura automática para mantener la proporción */
+        aspect-ratio: 16 / 9; /* Proporción 16:9 para las gráficas */
+        margin: 20px auto;
+        display: block;
+        border-radius: 8px;
+        background-color: #1e1e1e; /* Fondo un poco más claro para mejor contraste */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para mejor visibilidad */
+    }
+
+    /* Estilo para las gráficas en dispositivos pequeños */
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        canvas {
+            width: 100% !important; /* Ocupa el 100% del ancho en móviles */
+            max-width: 100%; /* Sin límite de ancho máximo en móviles */
+            height: auto !important; /* Altura automática para mantener la proporción */
+            aspect-ratio: 16 / 9; /* Proporción 16:9 para las gráficas */
+        }
+
+        h2 {
+            font-size: 1.5rem; /* Aumenta el tamaño del texto de los títulos */
+        }
+    }
+
+    /* Mejoras adicionales para la legibilidad */
+    .chart-container {
+        margin-bottom: 2rem;
+    }
+
+    .chart-container h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .chart-container canvas {
+        margin: 0 auto;
+    }
+</style>
 
 {% endblock %}

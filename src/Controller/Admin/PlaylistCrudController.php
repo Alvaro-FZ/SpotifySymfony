@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 
 class PlaylistCrudController extends AbstractCrudController
 {
@@ -22,7 +23,7 @@ class PlaylistCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('nombre'),
-            TextField::new('visibilidad'),
+            ChoiceField::new('visibilidad'),
             NumberField::new('likes'),
             TextField::new('portada'),
             AssociationField::new('usuarioPropietario', 'usuarioPropietario')

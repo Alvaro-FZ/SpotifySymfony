@@ -2,22 +2,24 @@
 
 namespace App\Entity;
 
-use App\Repository\UsuarioPlaylistRepository;
+use App\Repository\UsuarioPlayListRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UsuarioPlaylistRepository::class)]
-class UsuarioPlaylist
+#[ORM\Entity(repositoryClass: UsuarioPlayListRepository::class)]
+class UsuarioPlayList
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usuarioPlaylists')]
-    private ?Usuario $usuario = null;
+    #[ORM\ManyToOne(inversedBy: 'playlist')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $usuario = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usuarioPlaylists')]
-    private ?Playlist $playlist = null;
+    #[ORM\ManyToOne(inversedBy: 'usuario')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?PlayList $playlist = null;
 
     #[ORM\Column]
     private ?int $reproducida = null;
@@ -27,24 +29,24 @@ class UsuarioPlaylist
         return $this->id;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): static
+    public function setUsuario(?User $usuario): static
     {
         $this->usuario = $usuario;
 
         return $this;
     }
 
-    public function getPlaylist(): ?Playlist
+    public function getPlaylist(): ?PlayList
     {
         return $this->playlist;
     }
 
-    public function setPlaylist(?Playlist $playlist): static
+    public function setPlaylist(?PlayList $playlist): static
     {
         $this->playlist = $playlist;
 

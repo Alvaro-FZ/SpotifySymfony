@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}MySpotify{% endblock %}</title>
-        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/Spotify_Logo_Black.png')}}">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -28,7 +28,14 @@
                     <aside class="sidebar">
                         <ul>
                             {% block sidebar %}
-                            
+                                <!-- Contenido predeterminado del sidebar -->
+                                <a href="/music"><li><strong>Canciones</strong></li></a>
+                                <br>
+                                <a href="/playlist"><li><strong>Playlists</strong></li></a>
+                                <br>
+                                <a href="/playlist/new"><li><strong>Crear Playlist</strong></li></a>
+                                <br>
+                                <a href="/misPlaylists"><li><strong>Mis Playlists</strong></li></a>
                             {% endblock %}
                         </ul>
                     </aside>
@@ -216,7 +223,12 @@
                     object-fit: cover;
                 }
 
-                .song-card h3 {
+                .song-card h4 {
+                    font-size: 0.75rem;
+                    font-weight: 200;
+                }
+
+                .song-card h5 {
                     font-size: 1rem;
                     font-weight: 500;
                 }

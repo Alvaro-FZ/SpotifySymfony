@@ -13,10 +13,10 @@ class UsuarioListenPlaylist
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usuarioListenPlaylists')]
-    private ?Usuario $usuario = null;
+    #[ORM\ManyToOne(inversedBy: 'escuchada')]
+    private ?User $usuario = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usuarioListenPlaylists')]
+    #[ORM\ManyToOne(inversedBy: 'escuchada')]
     private ?Playlist $playlist = null;
 
     public function getId(): ?int
@@ -24,12 +24,12 @@ class UsuarioListenPlaylist
         return $this->id;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): static
+    public function setUsuario(?User $usuario): static
     {
         $this->usuario = $usuario;
 

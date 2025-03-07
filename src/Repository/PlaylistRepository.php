@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Playlist;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,6 +41,15 @@ class PlaylistRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /* public function findPlaylistsPublicas(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.nombre LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+    } */
+
     public function obtenerLikesPlaylist(): array
     {
         return $this->createQueryBuilder('p')
@@ -57,5 +67,15 @@ class PlaylistRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    // src/Repository/PlaylistRepository.php
+    public function findByUsuarioPropietarioId($usuarioId)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.usuarioPropietario = :usuarioId')
+            ->setParameter('usuarioId', $usuarioId)
+            ->getQuery()
+            ->getResult();
     }
 }

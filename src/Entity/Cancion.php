@@ -21,14 +21,15 @@ class Cancion
     #[ORM\Column]
     private ?int $duracion = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $album = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $archivo = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $autor = null;
+
+    #[ORM\ManyToOne(inversedBy: 'canciones')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Estilo $genero = null;
 
     #[ORM\Column]
     private ?int $likes = null;
@@ -39,11 +40,12 @@ class Cancion
     #[ORM\OneToMany(targetEntity: PlaylistCancion::class, mappedBy: 'cancion')]
     private Collection $playlistCancions;
 
-    #[ORM\ManyToOne(inversedBy: 'cancions')]
-    private ?Estilo $genero = null;
-
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $archivo = null;
+
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $portada = null;
+    
 
     public function __construct()
     {
@@ -60,7 +62,7 @@ class Cancion
         return $this->titulo;
     }
 
-    public function setTitulo(string $titulo): static
+    public function setTitulo(string $titulo)
     {
         $this->titulo = $titulo;
 
@@ -72,7 +74,7 @@ class Cancion
         return $this->duracion;
     }
 
-    public function setDuracion(int $duracion): static
+    public function setDuracion(int $duracion)
     {
         $this->duracion = $duracion;
 
@@ -84,21 +86,9 @@ class Cancion
         return $this->album;
     }
 
-    public function setAlbum(string $album): static
+    public function setAlbum(?string $album)
     {
         $this->album = $album;
-
-        return $this;
-    }
-
-    public function getArchivo(): ?string
-    {
-        return $this->archivo;
-    }
-
-    public function setArchivo(string $archivo): static
-    {
-        $this->archivo = $archivo;
 
         return $this;
     }
@@ -108,9 +98,21 @@ class Cancion
         return $this->autor;
     }
 
-    public function setAutor(string $autor): static
+    public function setAutor(string $autor)
     {
         $this->autor = $autor;
+
+        return $this;
+    }
+
+    public function getGenero(): ?Estilo
+    {
+        return $this->genero;
+    }
+
+    public function setGenero(?Estilo $genero)
+    {
+        $this->genero = $genero;
 
         return $this;
     }
@@ -120,22 +122,18 @@ class Cancion
         return $this->likes;
     }
 
-    public function setLikes(int $likes): static
+    public function setLikes(int $likes)
     {
         $this->likes = $likes;
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, PlaylistCancion>
-     */
     public function getPlaylistCancions(): Collection
     {
         return $this->playlistCancions;
     }
 
-    public function addPlaylistCancion(PlaylistCancion $playlistCancion): static
+    public function addPlaylistCancion(PlaylistCancion $playlistCancion)
     {
         if (!$this->playlistCancions->contains($playlistCancion)) {
             $this->playlistCancions->add($playlistCancion);
@@ -145,7 +143,7 @@ class Cancion
         return $this;
     }
 
-    public function removePlaylistCancion(PlaylistCancion $playlistCancion): static
+    public function removePlaylistCancion(PlaylistCancion $playlistCancion)
     {
         if ($this->playlistCancions->removeElement($playlistCancion)) {
             // set the owning side to null (unless already changed)
@@ -157,14 +155,28 @@ class Cancion
         return $this;
     }
 
-    public function getGenero(): ?Estilo
+   
+
+    public function getarchivo(): ?string
     {
-        return $this->genero;
+        return $this->archivo;
     }
 
-    public function setGenero(?Estilo $genero): static
+    public function setarchivo(?string $archivo)
     {
-        $this->genero = $genero;
+        $this->archivo = $archivo;
+
+        return $this;
+    }
+
+    public function getPortada(): ?string
+    {
+        return $this->portada;
+    }
+
+    public function setPortada(string $portada)
+    {
+        $this->portada = $portada;
 
         return $this;
     }
@@ -174,15 +186,5 @@ class Cancion
         return $this->titulo;
     }
 
-    public function getPortada(): ?string
-    {
-        return $this->portada;
-    }
-
-    public function setPortada(?string $portada): static
-    {
-        $this->portada = $portada;
-
-        return $this;
-    }
+  
 }
